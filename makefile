@@ -1,7 +1,7 @@
 CC = g++
 FLAGS = -o 
 IFLAGS = -lm
-FILES = src/Aoi4.cc #lib/nn.c lib/math/calculas.c
+FILES = src/*.cc #lib/nn.c lib/math/calculas.c
 # OBJ_FILES = main.o 
 OUT_DIR = builds/main
 # gcc -o builds/main main.c
@@ -9,7 +9,8 @@ OUT_DIR = builds/main
 # to create obj files
 # gcc -Wall -c {filename}.c
 
-nn: ${FILES} 
+nn: ${FILES}
+	@echo "🚧 Building..."
 	${CC} ${FLAGS} ${OUT_DIR} ${FILES} ${IFLAGS}
 
 run: ${OUT_DIR}
