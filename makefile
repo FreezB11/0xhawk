@@ -1,7 +1,7 @@
 CC = g++
 FLAGS = -o 
 IFLAGS = -lm
-FILES = src/*.cc #lib/nn.c lib/math/calculas.c
+FILES = main.cc src/*.cc #lib/nn.c lib/math/calculas.c
 # OBJ_FILES = main.o 
 OUT_DIR = builds/main
 # gcc -o builds/main main.c
