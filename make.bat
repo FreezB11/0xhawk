@@ -8,7 +8,9 @@ if %ERRORLEVEL% neq 0 (
 )
 
 REM Compile the provided .cc file
+@echo "🚧 Building..."
 g++ -o "builds/main" main.cc src/*.cc
+
 if %ERRORLEVEL% neq 0 (
     echo Compilation failed.
     exit /b 1

@@ -1,14 +1,9 @@
 #include <iostream>
-#include <math.h>
-#define log(x) std::cout << x << std::endl;
-int count_digits(int n) { return int(log10(n) + 1); }
-template<typename T> T max(T &a, T &b) { return a > b ? a : b; }
-#include "A014.hh"
+#include <vector>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
 
-mvector::mvector(int dat){
-    data = dat;
-    log(data)
-}
 // Activation function and its derivative
 double sigmoid(double x) {
     return 1.0 / (1.0 + exp(-x));
@@ -17,6 +12,25 @@ double sigmoid(double x) {
 double sigmoid_derivative(double x) {
     return x * (1.0 - x);
 }
+
+// Neural Network Class
+class NeuralNetwork {
+public:
+    NeuralNetwork(int inputSize, int hiddenSize, int outputSize);
+    void train(std::vector<std::vector<double>>& inputs, std::vector<std::vector<double>>& outputs, int epochs, double learningRate);
+    std::vector<double> predict(std::vector<double>& input);
+
+private:
+    int inputSize, hiddenSize, outputSize;
+    std::vector<std::vector<double>> weightsInputHidden;
+    std::vector<std::vector<double>> weightsHiddenOutput;
+    std::vector<double> hiddenLayer;
+    std::vector<double> outputLayer;
+
+    void initializeWeights();
+    std::vector<double> feedforward(std::vector<double>& input);
+    void backpropagate(std::vector<double>& input, std::vector<double>& target, double learningRate);
+};
 
 NeuralNetwork::NeuralNetwork(int inputSize, int hiddenSize, int outputSize)
     : inputSize(inputSize), hiddenSize(hiddenSize), outputSize(outputSize) {
@@ -102,4 +116,20 @@ void NeuralNetwork::train(std::vector<std::vector<double>>& inputs, std::vector<
 
 std::vector<double> NeuralNetwork::predict(std::vector<double>& input) {
     return feedforward(input);
+}
+
+int main() {
+    NeuralNetwork nn(2, 2, 1);
+
+    std::vector<std::vector<double>> inputs = { {0, 0}, {0, 1}, {1, 0}, {1, 1} };
+    std::vector<std::vector<double>> outputs = { {0}, {0}, {0}, {1} };
+
+    nn.train(inputs, outputs, 10000, 0.1);
+
+    for (auto& input : inputs) {
+        std::vector<double> output = nn.predict(input);
+        std::cout << "Input: " << input[0] << ", " << input[1] << " - Predicted Output: " << output[0] << std::endl;
+    }
+
+    return 0;
 }
