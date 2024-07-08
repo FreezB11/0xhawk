@@ -7,6 +7,7 @@ Matrix::Matrix(int rows, int cols) : rows(rows), cols(cols) {
     for (int i = 0; i < rows; ++i) {
         data[i] = new double[cols]();
     }
+    std::cout << "initiated" << std::endl;
 }
 
 Matrix::~Matrix() {
