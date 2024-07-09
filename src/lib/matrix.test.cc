@@ -9,7 +9,7 @@ int main() {
     m1.at(0, 0) = 1; m1.at(0, 1) = 2; m1.at(0, 2) = 3;
     m1.at(1, 0) = 4; m1.at(1, 1) = 5; m1.at(1, 2) = 6;
 
-    // Initialize m2
+    // Initialize m2 
     m2.at(0, 0) = 7; m2.at(0, 1) = 8; m2.at(0, 2) = 9;
     m2.at(1, 0) = 10; m2.at(1, 1) = 11; m2.at(1, 2) = 12;
 
