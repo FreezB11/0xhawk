@@ -9,7 +9,7 @@ if %ERRORLEVEL% neq 0 (
 
 REM Compile the provided .cc file
 @echo "🚧 Building..."
-g++ -o "builds/main" main.cc src/*.cc
+g++ -o "builds/main" main.cc src/*.cc src/lib/math/*.cc
 
 if %ERRORLEVEL% neq 0 (
     echo Compilation failed.

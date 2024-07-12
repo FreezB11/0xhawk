@@ -6,6 +6,8 @@
 double sigmoid(double x);
 double sigmoid_derivative(double x);
 double relu(double x);
+int Binary(double x);
+double mtanh(double x);
 
 
 #endif

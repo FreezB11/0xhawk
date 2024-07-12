@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "calculas.h"
+#include "calculas.hh"
 #include <math.h>
 
 float df(float (*func)(float),float x){

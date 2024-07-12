@@ -13,9 +13,6 @@ public:
     mvector(int dat);
 };
 
-double sigmoid(double x);
-double sigmoid_derivative(double x);
-
 class NeuralNetwork {
 public:
     NeuralNetwork(int inputSize, int hiddenSize, int outputSize);

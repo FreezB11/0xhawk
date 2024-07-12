@@ -5,8 +5,8 @@ int main(){
     //mvector c(8);
     NeuralNetwork nn(2, 4, 1);
 
-    std::vector<std::vector<double>> inputs = { {0,0}, {1,0}, {2,0}, {3,0} };
-    std::vector<std::vector<double>> outputs = { {0}, {2}, {4}, {6} };
+    std::vector<std::vector<double>> inputs = { {0,0}, {1,0}, {0,1}, {1,1} };
+    std::vector<std::vector<double>> outputs = { {0}, {0}, {0}, {1} };
 
     nn.train(inputs, outputs, 10000, 0.1);
 

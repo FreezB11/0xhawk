@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include "lib/math/activation.hh"
 #define log(x) std::cout << x << std::endl;
 int count_digits(int n) { return int(log10(n) + 1); }
 template<typename T> T max(T &a, T &b) { return a > b ? a : b; }
@@ -8,14 +9,6 @@ template<typename T> T max(T &a, T &b) { return a > b ? a : b; }
 mvector::mvector(int dat){
     data = dat;
     log(data)
-}
-// Activation function and its derivative
-double sigmoid(double x) {
-    return 1.0 / (1.0 + exp(-x));
-}
-
-double sigmoid_derivative(double x) {
-    return x * (1.0 - x);
 }
 
 NeuralNetwork::NeuralNetwork(int inputSize, int hiddenSize, int outputSize)
