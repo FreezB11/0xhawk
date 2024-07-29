@@ -1,7 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+<<<<<<< HEAD
 #include "../lpng1643/png.h"
+=======
+#include <png.h>
+>>>>>>> 02c5c1568c4f00cb54a7d1bae36954f361de6ae6
 
 using namespace std;
 
