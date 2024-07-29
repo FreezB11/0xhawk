@@ -5,6 +5,15 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+
+#ifdef _WIN32
+    #include "./lib/api/src/windows_tcp.h"
+#elif __linux__
+    #include "linux_specific.h"
+#else
+    #error "Unknown operating system"
+#endif
+
 // template<typename t>
 class mvector{
 private:
