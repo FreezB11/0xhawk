@@ -5,6 +5,5 @@
 int main(int argc, char *argv[]){
 
     ark net("girl.png");
-    
     return 0;
 }
