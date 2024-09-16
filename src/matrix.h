@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include <vector>
+#include <complex>
 
 class Matrix {
 public:
@@ -13,6 +14,7 @@ public:
 
     // Access element at (i, j)
     float& at(int row, int col);
+    std::vector<std::vector<std::complex<float>>> computeDFT() const;
 
     // Matrix operations (e.g., addition, multiplication, etc.) can be added later
 };
