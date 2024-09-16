@@ -1,10 +1,20 @@
-#include <iostream>
+#ifndef MATRIX_H
+#define MATRIX_H
 
-template <typename T>
-class matrix{
-private:
-    T** data;
-    int row, col;
+#include <vector>
+
+class Matrix {
 public:
-    matrix(int r, int c);
+    int rows, cols;
+    std::vector<std::vector<float>> data;
+
+    // Constructor
+    Matrix(int rows, int cols);
+
+    // Access element at (i, j)
+    float& at(int row, int col);
+
+    // Matrix operations (e.g., addition, multiplication, etc.) can be added later
 };
+
+#endif // MATRIX_H
