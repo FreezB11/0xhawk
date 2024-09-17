@@ -15,7 +15,7 @@ public:
     // Access element at (i, j)
     float& at(int row, int col);
     std::vector<std::vector<std::complex<float>>> computeDFT() const;
-
+    Matrix convolve(const Matrix& main, const Matrix& kernel);
     // Matrix operations (e.g., addition, multiplication, etc.) can be added later
 };
 

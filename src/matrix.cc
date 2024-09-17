@@ -28,3 +28,12 @@ std::vector<std::vector<std::complex<float>>> Matrix::computeDFT() const {
 
     return dftResult;
 }
+
+Matrix Matrix::convolve(const Matrix& main, const Matrix& kernel){
+    Matrix output(main.rows,main.cols);
+
+
+    
+
+    return output;
+};
