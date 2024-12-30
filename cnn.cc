@@ -95,8 +95,17 @@ public:
     }
     void train(const char* filename){
         csv train(filename);
-        rows = train.getrow();
-        
+        // rows = train.getrow();
+        rows = 1;
+        for(int i = 1; i<= rows;++i){
+            trainset curr = train.read_data(filename, i);
+            _train(curr);
+        }
+    }
+
+    void _train(trainset &curr){
+        std::cout << curr.id << std::endl;
+        std::cout << "image: \n" << curr.image << std::endl;
     }   
 };
 //train
@@ -116,5 +125,8 @@ int main(){
     }catch (const std::exception& ex){
         std::cerr << "Error: " << ex.what() << std::endl;
     }
+
+    // cnn nn;
+    // nn.train("./dataset/train.csv");
     return 0;
 }
