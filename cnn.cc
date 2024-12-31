@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <eigen3/Eigen/Dense>
+#include "./lib/mmath.hh"
 
 #define KERNEL_SIZE 3
 #define STRIDE 1
@@ -112,21 +113,41 @@ public:
 
 int main(){
     // std::cout << IMAGED << std::endl;
-    csv train("./dataset/train.csv");
-    std::cout << train.getrow() << std::endl;
+    // csv train("./dataset/train.csv");
+    // std::cout << train.getrow() << std::endl;
 
-    //test for line data
-    csv test("./dataset/train.csv");
-    try{
-        trainset t = test.read_data("./dataset/train.csv",1);
+    // //test for line data
+    // csv test("./dataset/train.csv");
+    // try{
+    //     trainset t = test.read_data("./dataset/train.csv",1);
 
-        std::cout << "img \n" << t.image << std::endl;
+    //     std::cout << "img \n" << t.image << std::endl;
 
-    }catch (const std::exception& ex){
-        std::cerr << "Error: " << ex.what() << std::endl;
-    }
+    // }catch (const std::exception& ex){
+    //     std::cerr << "Error: " << ex.what() << std::endl;
+    // }
 
     // cnn nn;
     // nn.train("./dataset/train.csv");
+
+    Eigen::MatrixXf input(5, 5);
+    input << 1, 2, 3, 4, 5,
+             6, 7, 8, 9, 10,
+             11, 12, 13, 14, 15,
+             16, 17, 18, 19, 20,
+             21, 22, 23, 24, 25;
+
+    Eigen::MatrixXf kernel(3, 3);
+    kernel << 1, 0, -1,
+              1, 0, -1,
+              1, 0, -1;
+
+    int padding = 0; // Example padding
+    int stride = 2;  // Example stride
+
+    Eigen::MatrixXf result = convolve(input, kernel, padding, stride);
+    std::cout << "Result of convolution:\n" << result << std::endl;
+
+
     return 0;
 }
