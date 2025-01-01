@@ -86,6 +86,7 @@ class cnn{
 private:
     Eigen::Matrix3f kernel;
     Eigen::Matrix<float,IMAGED,IMAGED> image;
+    std::vector<Eigen::MatrixXf> filters;
     int rows;
 public:
     cnn(){
