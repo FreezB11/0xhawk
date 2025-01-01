@@ -18,6 +18,14 @@ typedef struct trainset{
     Eigen::Matrix<float,IMAGED,IMAGED> image;
 }trainset;
 
+typedef struct _arch{
+    int kernel_size;
+    int out_param_size;
+    double (*activation)(double x);
+    const char* _testset;
+    const char* _trainset;
+}_arch;
+
 class csv{
 private:
     int rows = 0;
@@ -84,30 +92,35 @@ public:
 
 class cnn{
 private:
-    Eigen::Matrix3f kernel;
     Eigen::Matrix<float,IMAGED,IMAGED> image;
     std::vector<Eigen::MatrixXf> filters;
+    _arch net;
     int rows;
-public:
-    cnn(){
 
-    }
-    ~cnn(){
+    void frwd_p(trainset & curr){
 
-    }
-    void train(const char* filename){
-        csv train(filename);
-        // rows = train.getrow();
-        rows = 1;
-        for(int i = 1; i<= rows;++i){
-            trainset curr = train.read_data(filename, i);
-            _train(curr);
-        }
     }
 
     void _train(trainset &curr){
         std::cout << curr.id << std::endl;
         std::cout << "image: \n" << curr.image << std::endl;
+    }
+
+public:
+    cnn(_arch& cnn_arch){
+        this->net = cnn_arch; 
+    }   
+    ~cnn(){
+
+    }
+    void train(){
+        csv train(this->net._trainset);
+        // rows = train.getrow();
+        rows = 1;
+        for(int i = 1; i<= rows;++i){
+            trainset curr = train.read_data(this->net._trainset, i);
+            _train(curr);
+        }
     }   
 };
 //train
@@ -131,24 +144,34 @@ int main(){
     // cnn nn;
     // nn.train("./dataset/train.csv");
 
-    Eigen::MatrixXf input(5, 5);
-    input << 1, 2, 3, 4, 5,
-             6, 7, 8, 9, 10,
-             11, 12, 13, 14, 15,
-             16, 17, 18, 19, 20,
-             21, 22, 23, 24, 25;
+    // Eigen::MatrixXf input(5, 5);
+    // input << 1, 2, 3, 4, 5,
+    //          6, 7, 8, 9, 10,
+    //          11, 12, 13, 14, 15,
+    //          16, 17, 18, 19, 20,
+    //          21, 22, 23, 24, 25;
 
-    Eigen::MatrixXf kernel(3, 3);
-    kernel << 1, 0, -1,
-              1, 0, -1,
-              1, 0, -1;
+    // Eigen::MatrixXf kernel(3, 3);
+    // kernel << 1, 0, -1,
+    //           1, 0, -1,
+    //           1, 0, -1;
 
-    int padding = 0; // Example padding
-    int stride = 2;  // Example stride
+    // int padding = 0; // Example padding
+    // int stride = 2;  // Example stride
 
-    Eigen::MatrixXf result = convolve(input, kernel, padding, stride);
-    std::cout << "Result of convolution:\n" << result << std::endl;
+    // Eigen::MatrixXf result = convolve(input, kernel, padding, stride);
+    // std::cout << "Result of convolution:\n" << result << std::endl;
 
+    _arch my = {
+        .kernel_size =3,
+        .out_param_size = 10,
+        .activation = relu,
+        ._testset = "./dataset/test.csv",
+        ._trainset = "./dataset/train.csv",
+    };
+
+    cnn mynet(my);
+    mynet.train();
 
     return 0;
 }
