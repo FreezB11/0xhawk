@@ -75,8 +75,28 @@ void cnn::frwd_p(trainset & curr){
 }
 
 void cnn::_train(trainset &curr){
+
+    int layer_id = 0;
     std::cout << curr.id << std::endl;
-    std::cout << "image: \n" << curr.image << std::endl;
+    // std::cout << "image: \n" << curr.image << std::endl;
+    this->buff_data = curr.image;
+
+    for(auto layer: net.layers){
+        if(layer._type == "conv"){
+            kernels.resize(layer_id+1);
+            std::cout << "checksum" << std::endl;
+            int m = layer.kernel_s;
+
+            if (layer_id >= kernels.size()) {
+                throw std::runtime_error("Kernel storage not initialized for layer_id");
+            }
+
+            kernels[layer_id] = Eigen::MatrixXd::Random(m,m);
+        }else{
+            std::cout << "i will pool " << std::endl;
+        }
+    }
+
 }
 
 cnn::cnn(_arch& cnn_arch){
@@ -135,11 +155,14 @@ int main(){
     // std::cout << "Result of convolution:\n" << result << std::endl;
 
     _arch my = {
-        .kernel_size =3,
         .out_param_size = 10,
         .activation = relu,
         ._testset = "./dataset/test.csv",
         ._trainset = "./dataset/train.csv",
+        .layers = {
+                    _layer{._type = "conv",.filters = 2,.kernel_s = 3,.stride =1},
+                    _layer{._type = "pool",.pool = max_pool},
+                },
     };
 
     cnn mynet(my);

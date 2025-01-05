@@ -8,18 +8,22 @@ typedef struct trainset{
     Eigen::MatrixXf         image;
 }trainset;
 
-typedef struct _layers{
-    Eigen::MatrixXf         (*convolve)(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel, int padd, int stride);
-    Eigen::MatrixXf         (*pool)(Eigen::MatrixXf& input);
-}_layers;
+typedef struct _layer{
+    const char*             _type; //i.e convolution or pool
+    int                     test;
+    int                     filters = 1;
+    int                     kernel_s;
+    int                     stride = 1;
+    // Eigen::MatrixXf         (*convolve)(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel, int padd, int stride);
+    Eigen::MatrixXf         (*pool)(Eigen::MatrixXf& input) = nullptr;
+}_layer;
 
 typedef struct _arch{
-    int                     kernel_size;
     int                     out_param_size;
     double                  (*activation)(double x);
     const char*             _testset;
     const char*             _trainset;
-    std::vector<_layers>    layer;
+    std::vector<_layer>    layers;
 }_arch;
 
 
@@ -33,10 +37,12 @@ public:
     int                     getrow();
 };
 
+
 class cnn{
 private:
-    Eigen::MatrixXf         image;
-    std::vector<Eigen::MatrixXf> filters;
+    Eigen::MatrixXf         buff_data;
+    std::vector<std::pair <Eigen::MatrixXf,int>> filters;
+    std::vector<Eigen::MatrixXd> kernels;
     _arch                   net;
     int                     rows;
     void                    frwd_p(trainset & curr);
