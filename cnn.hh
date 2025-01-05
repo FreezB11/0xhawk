@@ -5,7 +5,7 @@
 
 typedef struct trainset{
     int                     id;
-    Eigen::MatrixXf         image;
+    Eigen::MatrixXd         image;
 }trainset;
 
 typedef struct _layer{
@@ -14,8 +14,9 @@ typedef struct _layer{
     int                     filters = 1;
     int                     kernel_s;
     int                     stride = 1;
+    int                     padding = 0;
     // Eigen::MatrixXf         (*convolve)(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel, int padd, int stride);
-    Eigen::MatrixXf         (*pool)(Eigen::MatrixXf& input) = nullptr;
+    Eigen::MatrixXd         (*pool)(Eigen::MatrixXd& input) = nullptr;
 }_layer;
 
 typedef struct _arch{
@@ -40,8 +41,8 @@ public:
 
 class cnn{
 private:
-    Eigen::MatrixXf         buff_data;
-    std::vector<std::pair <Eigen::MatrixXf,int>> filters;
+    Eigen::MatrixXd         buff_data;
+    std::vector<std::pair <Eigen::MatrixXd,int>> filters;
     std::vector<Eigen::MatrixXd> kernels;
     _arch                   net;
     int                     rows;

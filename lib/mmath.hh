@@ -3,19 +3,19 @@
 #include <eigen3/Eigen/Dense>
 #include <math.h>
 
-Eigen::MatrixXf convolve(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel,int padding = 0, int stride = 1){
+Eigen::MatrixXd convolve(Eigen::MatrixXd& base, Eigen::MatrixXd& kernel, int stride = 1,int padding = 0){
     int base_rows = base.rows();
     int base_cols = base.cols();
     int kernel_row = kernel.rows();
     int kernel_col = kernel.cols();
 
-    Eigen::MatrixXf curr_base;
+    Eigen::MatrixXd curr_base;
 
     if(padding != 0){
         base_rows += 2*padding;
         base_cols += 2*padding;
         
-        Eigen::MatrixXf padded(base_rows,base_cols);
+        Eigen::MatrixXd padded(base_rows,base_cols);
         padded.setZero();
         padded.block(padding, padding, base_rows-2*padding, base_cols-2*padding) = base;
         curr_base = padded;
@@ -27,14 +27,14 @@ Eigen::MatrixXf convolve(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel,int padd
     int opr = (curr_base.rows() - kernel_row)/ stride + 1;
     int opc = (curr_base.cols() - kernel_col)/ stride + 1;
 
-    Eigen::MatrixXf out(opr,opc);
+    Eigen::MatrixXd out(opr,opc);
 
    for(int i = 0; i < opr; i++){
         for (int j = 0; j < opc; j++){
             int rowS = i* stride;
             int colS = j* stride;
 
-            Eigen::MatrixXf sub_matix = curr_base.block(rowS,colS, kernel_row, kernel_col);
+            Eigen::MatrixXd sub_matix = curr_base.block(rowS,colS, kernel_row, kernel_col);
             
             out(i,j) = (sub_matix.array() * kernel.array()).sum();
         }
@@ -44,47 +44,47 @@ Eigen::MatrixXf convolve(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel,int padd
     return out;
 }
 
-Eigen::MatrixXf max_pool(Eigen::MatrixXf& input){
+Eigen::MatrixXd max_pool(Eigen::MatrixXd& input){
     int base_rows = input.rows();
     int base_cols = input.cols();
     int stride =2;
-    Eigen::MatrixXf curr_base;
+    Eigen::MatrixXd curr_base = input; // << there was stupid bug here
 
     int opr = base_rows / 2;
     int opc = base_cols / 2;
 
-    Eigen::MatrixXf out(opr,opc);
+    Eigen::MatrixXd out(opr,opc);
 
    for(int i = 0; i < opr; i++){
         for (int j = 0; j < opc; j++){
             int rowS = i* stride;
             int colS = j* stride;
-
-            Eigen::MatrixXf sub_matix = curr_base.block(rowS,colS, 2, 2);
-            
+            // std::cout << "the error is here" << std::endl;
+            Eigen::MatrixXd sub_matix = curr_base.block(rowS,colS, 2, 2);
+            // std::cout << "maybe here" << std::endl;
             out(i,j) = sub_matix.maxCoeff();
         }
    }
     return out;
 }
 
-Eigen::MatrixXf min_pool(Eigen::MatrixXf& input){
+Eigen::MatrixXd min_pool(Eigen::MatrixXd& input){
     int base_rows = input.rows();
     int base_cols = input.cols();
     int stride =2;
-    Eigen::MatrixXf curr_base;
+    Eigen::MatrixXd curr_base;
 
     int opr = base_rows / 2;
     int opc = base_cols / 2;
 
-    Eigen::MatrixXf out(opr,opc);
+    Eigen::MatrixXd out(opr,opc);
 
    for(int i = 0; i < opr; i++){
         for (int j = 0; j < opc; j++){
             int rowS = i* stride;
             int colS = j* stride;
 
-            Eigen::MatrixXf sub_matix = curr_base.block(rowS,colS, 2, 2);
+            Eigen::MatrixXd sub_matix = curr_base.block(rowS,colS, 2, 2);
             
             out(i,j) = sub_matix.minCoeff();
         }
@@ -92,23 +92,23 @@ Eigen::MatrixXf min_pool(Eigen::MatrixXf& input){
     return out;
 }
 
-Eigen::MatrixXf avg_pool(Eigen::MatrixXf& input){
+Eigen::MatrixXd avg_pool(Eigen::MatrixXd& input){
     int base_rows = input.rows();
     int base_cols = input.cols();
     int stride =2;
-    Eigen::MatrixXf curr_base;
+    Eigen::MatrixXd curr_base;
 
     int opr = base_rows / 2;
     int opc = base_cols / 2;
 
-    Eigen::MatrixXf out(opr,opc);
+    Eigen::MatrixXd out(opr,opc);
 
    for(int i = 0; i < opr; i++){
         for (int j = 0; j < opc; j++){
             int rowS = i* stride;
             int colS = j* stride;
 
-            Eigen::MatrixXf sub_matix = curr_base.block(rowS,colS, 2, 2);
+            Eigen::MatrixXd sub_matix = curr_base.block(rowS,colS, 2, 2);
             
             out(i,j) = sub_matix.sum()/4;
         }

@@ -52,7 +52,7 @@ trainset csv::read_data(const char* filename, int n){
             if(px.size() != IMAGED*IMAGED){
                 throw std::runtime_error("Invalid number of pixels");
             }
-            Eigen::Matrix<float, IMAGED, IMAGED> img;
+            Eigen::Matrix<double, IMAGED, IMAGED> img;
             for(int i = 0;  i< IMAGED;++i){
                 for(int j = 0; j < IMAGED; ++j){
                     img(i,j) = px[i*28 + j];
@@ -80,7 +80,6 @@ void cnn::_train(trainset &curr){
     std::cout << curr.id << std::endl;
     // std::cout << "image: \n" << curr.image << std::endl;
     this->buff_data = curr.image;
-
     for(auto layer: net.layers){
         if(layer._type == "conv"){
             kernels.resize(layer_id+1);
@@ -92,8 +91,13 @@ void cnn::_train(trainset &curr){
             }
 
             kernels[layer_id] = Eigen::MatrixXd::Random(m,m);
+
+            this->buff_data = convolve(this->buff_data,kernels[layer_id],layer.stride,layer.padding);
+
+
         }else{
             std::cout << "i will pool " << std::endl;
+            this->buff_data = max_pool(this->buff_data);
         }
     }
 
