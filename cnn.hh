@@ -1,12 +1,17 @@
 #pragma once
 #include <eigen3/Eigen/Dense>
 #include "./lib/mmath.hh"
-
+#include <vector>
 
 typedef struct trainset{
     int                     id;
     Eigen::MatrixXf         image;
 }trainset;
+
+typedef struct _layers{
+    Eigen::MatrixXf         (*convolve)(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel, int padd, int stride);
+    Eigen::MatrixXf         (*pool)(Eigen::MatrixXf& input);
+}_layers;
 
 typedef struct _arch{
     int                     kernel_size;
@@ -14,6 +19,7 @@ typedef struct _arch{
     double                  (*activation)(double x);
     const char*             _testset;
     const char*             _trainset;
+    std::vector<_layers>    layer;
 }_arch;
 
 

@@ -68,6 +68,54 @@ Eigen::MatrixXf max_pool(Eigen::MatrixXf& input){
     return out;
 }
 
+Eigen::MatrixXf min_pool(Eigen::MatrixXf& input){
+    int base_rows = input.rows();
+    int base_cols = input.cols();
+    int stride =2;
+    Eigen::MatrixXf curr_base;
+
+    int opr = base_rows / 2;
+    int opc = base_cols / 2;
+
+    Eigen::MatrixXf out(opr,opc);
+
+   for(int i = 0; i < opr; i++){
+        for (int j = 0; j < opc; j++){
+            int rowS = i* stride;
+            int colS = j* stride;
+
+            Eigen::MatrixXf sub_matix = curr_base.block(rowS,colS, 2, 2);
+            
+            out(i,j) = sub_matix.minCoeff();
+        }
+   }
+    return out;
+}
+
+Eigen::MatrixXf avg_pool(Eigen::MatrixXf& input){
+    int base_rows = input.rows();
+    int base_cols = input.cols();
+    int stride =2;
+    Eigen::MatrixXf curr_base;
+
+    int opr = base_rows / 2;
+    int opc = base_cols / 2;
+
+    Eigen::MatrixXf out(opr,opc);
+
+   for(int i = 0; i < opr; i++){
+        for (int j = 0; j < opc; j++){
+            int rowS = i* stride;
+            int colS = j* stride;
+
+            Eigen::MatrixXf sub_matix = curr_base.block(rowS,colS, 2, 2);
+            
+            out(i,j) = sub_matix.sum()/4;
+        }
+   }
+    return out;
+}
+
 // Activation functions
 
 double sigmoid(double x){
