@@ -8,69 +8,6 @@
 #include <vector>
 #include "cnn.hh"
 
-#define KERNEL_SIZE 3
-#define STRIDE 1
-#define IMAGED 28 // taking the image to be square
-
-
-
-csv::csv(const char* filename){
-    std::ifstream file(filename);
-    char c;
-    while (file.get(c)){
-        if(c == '\n'){
-            rows++;
-        }
-    }
-    file.close();
-}
-csv::~csv(){
-}
-
-trainset csv::read_data(const char* filename, int n){
-    trainset res;
-    std::ifstream file(filename);
-    if(!file.is_open()){
-        throw std::runtime_error("Failed to open file");
-    }
-    std::string line;
-    int currentline = 0;
-    // skipping the first line as it is just the columen name
-    std::getline(file,line);
-    // we shall read now
-    while (std::getline(file,line)){
-        currentline++;
-        if(currentline == n){
-            std::istringstream linestream(line);
-            std::string token;
-            std::getline(linestream, token, ',');
-            res.id = std::stoi(token);
-            std::vector<float> px;
-            while(std::getline(linestream, token, ',')){
-                px.push_back((std::stoi(token)/255.0f));
-            }
-            if(px.size() != IMAGED*IMAGED){
-                throw std::runtime_error("Invalid number of pixels");
-            }
-            Eigen::Matrix<double, IMAGED, IMAGED> img;
-            for(int i = 0;  i< IMAGED;++i){
-                for(int j = 0; j < IMAGED; ++j){
-                    img(i,j) = px[i*28 + j];
-                }
-            }
-            res.image = img;
-            return res;
-        }
-    }
-    throw std::out_of_range("requestd line number is out of bound");
-}
-
-int csv::getrow(){
-    return rows;
-}
-
-
-
 void cnn::frwd_p(trainset & curr){
 }
 
@@ -83,7 +20,7 @@ void cnn::_train(trainset &curr){
     for(auto layer: net.layers){
         if(layer._type == "conv"){
             kernels.resize(layer_id+1);
-            std::cout << "checksum" << std::endl;
+            // std::cout << "checksum" << std::endl;
             int m = layer.kernel_s;
 
             if (layer_id >= kernels.size()) {
@@ -94,13 +31,29 @@ void cnn::_train(trainset &curr){
 
             this->buff_data = convolve(this->buff_data,kernels[layer_id],layer.stride,layer.padding);
 
-
+            // layer_id++;
         }else{
-            std::cout << "i will pool " << std::endl;
+            // std::cout << "i will pool " << std::endl;
             this->buff_data = max_pool(this->buff_data);
         }
     }
 
+    for(auto nlayer: net.hidden_lyrs){
+        
+    }
+
+}
+
+std::vector<double> cnn::flatten(Eigen::MatrixXd& inp){
+    std::vector<double> out;
+    out.resize(inp.rows() * inp.cols());
+    int idx =0;
+    for(int i = 0; i< inp.rows(); i++){
+        for(int j =0; j< inp.cols(); j++){
+            out[idx++] = inp(i,j);
+        }
+    }
+    return out;
 }
 
 cnn::cnn(_arch& cnn_arch){
@@ -116,6 +69,8 @@ void cnn::train(){
     for(int i = 1; i<= rows;++i){
         trainset curr = train.read_data(this->net._trainset, i);
         _train(curr);
+        std::cout << "Rows: " << this->buff_data.rows() << std::endl;
+        std::cout << "Cols: " << this->buff_data.cols() << std::endl;
     }
 }   
 
@@ -160,13 +115,20 @@ int main(){
 
     _arch my = {
         .out_param_size = 10,
+        .hidden_lyrs = {
+                {0,100},
+                {1,50}
+        },
         .activation = relu,
         ._testset = "./dataset/test.csv",
         ._trainset = "./dataset/train.csv",
         .layers = {
-                    _layer{._type = "conv",.filters = 2,.kernel_s = 3,.stride =1},
+                    _layer{._type = "conv",.filters = 2,.kernel_s = 5},
                     _layer{._type = "pool",.pool = max_pool},
-                },
+                    _layer{._type = "conv",.filters = 2,.kernel_s = 3},
+                    _layer{._type = "pool",.pool = avg_pool},
+                    _layer{._type = "conv",.filters = 2,.kernel_s = 2}
+        },
     };
 
     cnn mynet(my);

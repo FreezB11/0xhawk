@@ -1,7 +1,5 @@
-#pragma once
-
+#include "mmath.h"
 #include <eigen3/Eigen/Dense>
-#include <math.h>
 
 Eigen::MatrixXd convolve(Eigen::MatrixXd& base, Eigen::MatrixXd& kernel, int stride = 1,int padding = 0){
     int base_rows = base.rows();

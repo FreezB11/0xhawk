@@ -1,7 +1,9 @@
 #pragma once
 #include <eigen3/Eigen/Dense>
-#include "./lib/mmath.hh"
+#include "./lib/mmath.h"
 #include <vector>
+
+#define IMAGED 28 // taking the image to be square
 
 typedef struct trainset{
     int                     id;
@@ -21,6 +23,7 @@ typedef struct _layer{
 
 typedef struct _arch{
     int                     out_param_size;
+    std::vector<std::pair<int, int>>     hidden_lyrs; // this is for the neural network
     double                  (*activation)(double x);
     const char*             _testset;
     const char*             _trainset;
@@ -48,6 +51,8 @@ private:
     int                     rows;
     void                    frwd_p(trainset & curr);
     void                    _train(trainset &curr);
+    std::vector<double>     flatten(Eigen::MatrixXd& input);
+
 
 public:
     cnn(_arch& cnn_arch);  
