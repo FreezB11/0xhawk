@@ -19,19 +19,23 @@ void cnn::_train(trainset &curr){
     this->buff_data = curr.image;
     for(auto layer: net.layers){
         if(layer._type == "conv"){
-            kernels.resize(layer_id+1);
+            filters.resize(layer_id+1);
+            filters[layer_id].resize(layer.filters+1);
             // std::cout << "checksum" << std::endl;
             int m = layer.kernel_s;
 
-            if (layer_id >= kernels.size()) {
-                throw std::runtime_error("Kernel storage not initialized for layer_id");
+            if (layer_id >= filters.size()) {
+                throw std::runtime_error("layer for filter not initialized");
             }
+            if(layer.filters >= filters[layer_id].size()){
+                throw std::runtime_error("filter not initialized in the layer");
+            }
+            for(size_t i =0; i< layer.filters;i++){
+                filters[layer_id][i] = Eigen::MatrixXd::Random(m,m);
+            }
+            this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
 
-            kernels[layer_id] = Eigen::MatrixXd::Random(m,m);
-
-            this->buff_data = convolve(this->buff_data,kernels[layer_id],layer.stride,layer.padding);
-
-            // layer_id++;
+            layer_id++;
         }else{
             // std::cout << "i will pool " << std::endl;
             this->buff_data = max_pool(this->buff_data);

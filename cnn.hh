@@ -45,7 +45,7 @@ public:
 class cnn{
 private:
     Eigen::MatrixXd         buff_data;
-    std::vector<std::pair <Eigen::MatrixXd,int>> filters;
+    std::vector<std::vector<Eigen::MatrixXd>> filters;
     std::vector<Eigen::MatrixXd> kernels;
     _arch                   net;
     int                     rows;
