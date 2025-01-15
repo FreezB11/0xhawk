@@ -23,7 +23,7 @@ typedef struct _layer{
 
 typedef struct _arch{
     int                     out_param_size;
-    std::vector<std::pair<int, int>>     hidden_lyrs; // this is for the neural network
+    std::vector<int>        hidden_lyrs; // this is for the neural network
     double                  (*activation)(double x);
     const char*             _testset;
     const char*             _trainset;
@@ -47,6 +47,7 @@ private:
     Eigen::MatrixXd         buff_data;
     std::vector<std::vector<Eigen::MatrixXd>> filters;
     std::vector<Eigen::MatrixXd> kernels;
+    std::vector<double>     out_n;
     _arch                   net;
     int                     rows;
     void                    frwd_p(trainset & curr);

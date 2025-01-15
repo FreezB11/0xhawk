@@ -33,14 +33,18 @@ void cnn::_train(trainset &curr){
             for(size_t i =0; i< layer.filters;i++){
                 filters[layer_id][i] = Eigen::MatrixXd::Random(m,m);
             }
-            this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
+            // this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
 
+            for(size_t i =0; i< layer.filters;i++){
+                this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
+            }
             layer_id++;
         }else{
             // std::cout << "i will pool " << std::endl;
             this->buff_data = max_pool(this->buff_data);
         }
     }
+    out_n = flatten(this->buff_data);
 
     for(auto nlayer: net.hidden_lyrs){
         
@@ -119,10 +123,7 @@ int main(){
 
     _arch my = {
         .out_param_size = 10,
-        .hidden_lyrs = {
-                {0,100},
-                {1,50}
-        },
+        .hidden_lyrs = {10,90},
         .activation = relu,
         ._testset = "./dataset/test.csv",
         ._trainset = "./dataset/train.csv",
