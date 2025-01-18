@@ -44,7 +44,10 @@ public:
 
 class cnn{
 private:
-    Eigen::MatrixXd         buff_data;
+    int max_fc = 0;
+    std::vector<std::vector<int>> nlayers;
+    std::vector<std::vector<int>> nlweights;
+    std::vector<Eigen::MatrixXd>  buff_data;
     std::vector<std::vector<Eigen::MatrixXd>> filters;
     std::vector<Eigen::MatrixXd> kernels;
     std::vector<double>     out_n;

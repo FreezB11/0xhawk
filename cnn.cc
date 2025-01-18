@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "cnn.hh"
+#include "lib/utils.hh"
 
 void cnn::frwd_p(trainset & curr){
 }
@@ -14,16 +15,29 @@ void cnn::frwd_p(trainset & curr){
 void cnn::_train(trainset &curr){
 
     int layer_id = 0;
+    int cc = 0;
+    int k =1;
+    // int max_fc = 0;
     std::cout << curr.id << std::endl;
     // std::cout << "image: \n" << curr.image << std::endl;
-    this->buff_data = curr.image;
+    // this->buff_data.resize(10);
+    std::cout << this->buff_data.size() << std::endl;
+    this->buff_data.resize(k++);
+    // log(buff_data.size())
+    // std::cout << "the error is here" << std::endl;
+    dlog()
+    
+    this->buff_data[0] = curr.image;
+    dlog()
     for(auto layer: net.layers){
         if(layer._type == "conv"){
             filters.resize(layer_id+1);
+            this->buff_data.resize(k+1);
+
             filters[layer_id].resize(layer.filters+1);
             // std::cout << "checksum" << std::endl;
             int m = layer.kernel_s;
-
+            dlog()
             if (layer_id >= filters.size()) {
                 throw std::runtime_error("layer for filter not initialized");
             }
@@ -34,21 +48,32 @@ void cnn::_train(trainset &curr){
                 filters[layer_id][i] = Eigen::MatrixXd::Random(m,m);
             }
             // this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
-
+            dlog()
             for(size_t i =0; i< layer.filters;i++){
-                this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
+                dlog()
+                this->buff_data[i] = convolve(this->buff_data[i],filters[layer_id][i],layer.stride,layer.padding);
+                max_fc++;
             }
             layer_id++;
+            dlog()
         }else{
             // std::cout << "i will pool " << std::endl;
-            this->buff_data = max_pool(this->buff_data);
+            // this->buff_data = max_pool(this->buff_data);
+            for(int i =0; i<max_fc; i++){
+                this->buff_data[i] = max_pool(this->buff_data[i]);
+            }
         }
     }
-    out_n = flatten(this->buff_data);
+    // out_n = flatten(this->buff_data);
+    std::vector<double> buffv;
+    for(int i = 0; i<max_fc;i++){
+        buffv = flatten(this->buff_data[i]);
+        out_n.insert(out_n.end(),buffv.begin(),buffv.end());
+    }
 
     for(auto nlayer: net.hidden_lyrs){
         
-    }
+    }   
 
 }
 
@@ -77,8 +102,10 @@ void cnn::train(){
     for(int i = 1; i<= rows;++i){
         trainset curr = train.read_data(this->net._trainset, i);
         _train(curr);
-        std::cout << "Rows: " << this->buff_data.rows() << std::endl;
-        std::cout << "Cols: " << this->buff_data.cols() << std::endl;
+        for(int i =0 ; i<max_fc;i++){
+        std::cout << "Rows: " << this->buff_data[i].rows() << std::endl;
+        std::cout << "Cols: " << this->buff_data[i].cols() << std::endl;
+        }
     }
 }   
 
@@ -123,7 +150,7 @@ int main(){
 
     _arch my = {
         .out_param_size = 10,
-        .hidden_lyrs = {10,90},
+        .hidden_lyrs = {50,90},
         .activation = relu,
         ._testset = "./dataset/test.csv",
         ._trainset = "./dataset/train.csv",
