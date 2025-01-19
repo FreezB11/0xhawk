@@ -13,67 +13,48 @@ void cnn::frwd_p(trainset & curr){
 }
 
 void cnn::_train(trainset &curr){
+    int layer_id =0;
+    int fid = 1;
+    log("current image " << curr.id)
 
-    int layer_id = 0;
-    int cc = 0;
-    int k =1;
-    // int max_fc = 0;
-    std::cout << curr.id << std::endl;
-    // std::cout << "image: \n" << curr.image << std::endl;
-    // this->buff_data.resize(10);
-    std::cout << this->buff_data.size() << std::endl;
-    this->buff_data.resize(k++);
-    // log(buff_data.size())
-    // std::cout << "the error is here" << std::endl;
+    buff_data.resize(net.layers.size());
+    filters.resize(net.layers.size());
+
+    for(auto f: net.layers){
+        int i =0;
+        //f.filters
+        buff_data[i].resize(f.filters);
+        filters[i].resize(f.filters);
+        i++;
+    }
+    // buff_data[layer_id].resize(fid++);
+    log(fid)
     dlog()
-    
-    this->buff_data[0] = curr.image;
-    dlog()
+    // the error is below
+    buff_data[layer_id][fid] = curr.image;
+
     for(auto layer: net.layers){
         if(layer._type == "conv"){
-            filters.resize(layer_id+1);
-            this->buff_data.resize(k+1);
-
-            filters[layer_id].resize(layer.filters+1);
-            // std::cout << "checksum" << std::endl;
             int m = layer.kernel_s;
             dlog()
-            if (layer_id >= filters.size()) {
-                throw std::runtime_error("layer for filter not initialized");
-            }
-            if(layer.filters >= filters[layer_id].size()){
-                throw std::runtime_error("filter not initialized in the layer");
-            }
-            for(size_t i =0; i< layer.filters;i++){
+            for(int i = 0; i<layer.filters; i++){
                 filters[layer_id][i] = Eigen::MatrixXd::Random(m,m);
             }
-            // this->buff_data = convolve(this->buff_data,filters[layer_id][0],layer.stride,layer.padding);
             dlog()
-            for(size_t i =0; i< layer.filters;i++){
+            for(int i = 0; i < layer.filters; i++){
                 dlog()
-                this->buff_data[i] = convolve(this->buff_data[i],filters[layer_id][i],layer.stride,layer.padding);
-                max_fc++;
+                buff_data[layer_id+1][i] = convolve(buff_data[layer_id][i],filters[layer_id][i],layer.stride, layer.padding);
             }
-            layer_id++;
-            dlog()
+            fid++;
         }else{
-            // std::cout << "i will pool " << std::endl;
-            // this->buff_data = max_pool(this->buff_data);
-            for(int i =0; i<max_fc; i++){
-                this->buff_data[i] = max_pool(this->buff_data[i]);
-            }
+
         }
-    }
-    // out_n = flatten(this->buff_data);
-    std::vector<double> buffv;
-    for(int i = 0; i<max_fc;i++){
-        buffv = flatten(this->buff_data[i]);
-        out_n.insert(out_n.end(),buffv.begin(),buffv.end());
+        layer_id++;
+        // buff_data[layer_id].resize(fid++);
     }
 
-    for(auto nlayer: net.hidden_lyrs){
-        
-    }   
+    // and here the flatten func
+    log(fid)
 
 }
 
@@ -103,8 +84,8 @@ void cnn::train(){
         trainset curr = train.read_data(this->net._trainset, i);
         _train(curr);
         for(int i =0 ; i<max_fc;i++){
-        std::cout << "Rows: " << this->buff_data[i].rows() << std::endl;
-        std::cout << "Cols: " << this->buff_data[i].cols() << std::endl;
+        std::cout << "Rows: " << this->buff_data[max_fc][i].rows() << std::endl;
+        std::cout << "Cols: " << this->buff_data[max_fc][i].cols() << std::endl;
         }
     }
 }   
