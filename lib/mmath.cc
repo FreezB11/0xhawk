@@ -117,7 +117,12 @@ Eigen::MatrixXd avg_pool(Eigen::MatrixXd& input){
 // Activation functions
 
 double sigmoid(double x){
-    return (exp(x)/( 1 + exp(x)));
+    return (1/( 1 + exp(-x)));
+}
+
+double dsigmoid(double x){
+    double t = sigmoid(x);
+    return t*(1-t);
 }
 
 double binary_step(double c){
@@ -140,3 +145,16 @@ double relu(double x){
         return x;
     }
 }
+
+Eigen::VectorXd softmax(Eigen::VectorXd inp){
+    int s = inp.size();
+    int t = 0;
+    for(int i = 0; i< s; i++){
+        t += inp[i];
+    }
+    Eigen::VectorXd res(s);
+    for (int i = 0; i < s; i++){
+        res[i] = inp[i]/t;
+    }
+    return res;
+}   
