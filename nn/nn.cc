@@ -1,7 +1,9 @@
 #include <eigen3/Eigen/Dense>
 #include <fstream>
+#include <cstdlib>
 #include <iostream>
 #include "../lib/utils.hh"
+#include "../lib/mmath.h"
 
 Eigen::MatrixXd sigmoid(const Eigen::MatrixXd &z) {
     return 1.0 / (1.0 + (-z).array().exp());
@@ -162,17 +164,31 @@ int main(){
     // std::cout << p.data << std::endl;
     // std::cout << p.id << std::endl;
     // std::cout << test.getrow() << std::endl;
-    for(int i = 1; i< 40000;i++){
+
+    std::ofstream dataFile("loss.txt");
+    
+
+    int q = 20000;
+    for(int i = 1; i<q;i++){
         trainset p = test.read_data("../dataset/train.csv",i);
         forward(p.data);
-        std::cout << loss(p.id) << std::endl;
+        dataFile << i << " " << loss(p.id) << std::endl;
         back_propagation(p.data, p.id);
     }
+
+    dataFile.close();
+
     trainset t = test.read_data("../dataset/train.csv",8);
-    log("testing")
+    // log("testing")
     forward(t.data);
-    std::cout << A3 << std::endl;
-    std::cout << t.id << std::endl;
+    A3 = softmax(A3);
+
+    // std::cout << A3.transpose() << std::endl;
+    log("Model trained with "<< q << " samples\n")
+    log("Actual value of the number")
+    std::cout << t.id.transpose() << std::endl;
+    log("Predicted number by Network")
+    std::cout << A3.transpose() << std::endl;
 
     // std::cout << loss(p.id) << std::endl;
     // std::cout << A3 << std::endl;

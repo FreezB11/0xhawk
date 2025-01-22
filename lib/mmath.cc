@@ -1,5 +1,6 @@
 #include "mmath.h"
 #include <eigen3/Eigen/Dense>
+#include <iostream>
 
 Eigen::MatrixXd convolve(Eigen::MatrixXd& base, Eigen::MatrixXd& kernel, int stride = 1,int padding = 0){
     int base_rows = base.rows();
@@ -148,11 +149,12 @@ double relu(double x){
 
 Eigen::VectorXd softmax(Eigen::VectorXd inp){
     int s = inp.size();
-    int t = 0;
+    double t = 0.0f;
     for(int i = 0; i< s; i++){
         t += inp[i];
     }
-    Eigen::VectorXd res(s);
+    // std::cout << "the sum = " << t << std::endl;
+    Eigen::VectorXd res = Eigen::VectorXd::Zero(10);
     for (int i = 0; i < s; i++){
         res[i] = inp[i]/t;
     }
