@@ -1,6 +1,6 @@
 CC= g++ 
 LIBS = -lm -LEigen
-FILES = nn.cc ../lib/mmath.cc
+FILES = nn.cc ../src/lib/mmath.cc
 
 all:
 	${CC} -o nn ${FILES} ${LIBS}

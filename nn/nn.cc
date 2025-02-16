@@ -2,8 +2,8 @@
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
-#include "../lib/utils.hh"
-#include "../lib/mmath.h"
+#include "../src/lib/utils.hh"
+#include "../src/lib/mmath.h"
 
 Eigen::MatrixXd sigmoid(const Eigen::MatrixXd &z) {
     return 1.0 / (1.0 + (-z).array().exp());
