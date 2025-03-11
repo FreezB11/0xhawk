@@ -95,7 +95,7 @@ int main() {
     csv test("./dataset/train.csv");
 
 
-    trainset p = test.read_data("./dataset/train`.csv",4);
+    trainset p = test.read_data("./dataset/train.csv",4);
     std::cout << "here\n";
 
     // Eigen::MatrixXd input(784, 1);

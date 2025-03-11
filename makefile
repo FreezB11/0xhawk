@@ -1,6 +1,6 @@
 CC= g++ 
 LIBS = -lm -LEigen
-FILES = csv.cc cnn.cc lib/mmath.cc
+FILES = src/csv.cc src/cnn.cc src/lib/mmath.cc
 
 all:
 	${CC} -o cnn ${FILES} ${LIBS}

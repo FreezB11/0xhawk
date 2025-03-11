@@ -19,6 +19,22 @@
 #include <vector>
 #include <eigen3/Eigen/Dense>
 
+typedef struct trainset{
+    Eigen::VectorXd id;
+    Eigen::VectorXd data;
+}trainset;
+
+class csv{
+private:
+    int idim;
+    int rows = 0;
+public:
+    csv(const char* filename, int idim);
+    ~csv();
+    trainset                        read_data(const char* filename, int n);
+    int                             getrow();
+};
+
 class NeuralNetwork {
 public:
                                     NeuralNetwork(const std::vector<int>& layers);
