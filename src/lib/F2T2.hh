@@ -118,7 +118,7 @@ std::vector<std::complex<double>> FFT(std::vector<std::complex<double>> &x){
 #ifdef fft_test
 int main(){
 
-    std::vector<std::complex<double>> x({1,2});
+    std::vector<std::complex<double>> x({1,2,3,0,4,5,6,7});
     std::vector<std::complex<double>> X,Y;
     {
         Timer timer;

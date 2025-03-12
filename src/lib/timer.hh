@@ -12,7 +12,7 @@ class Timer{
             m_StartTimepoint = std::chrono::high_resolution_clock::now();
         }
         ~Timer(){
-            stop();
+            // stop();
         }
         void stop(){
             auto endTimepoint = std::chrono::high_resolution_clock::now();
