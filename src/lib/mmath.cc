@@ -95,7 +95,7 @@ Eigen::MatrixXd avg_pool(Eigen::MatrixXd& input){
     int base_rows = input.rows();
     int base_cols = input.cols();
     int stride =2;
-    Eigen::MatrixXd curr_base;
+    Eigen::MatrixXd curr_base = input;
 
     int opr = base_rows / 2;
     int opc = base_cols / 2;

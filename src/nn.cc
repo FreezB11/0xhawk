@@ -63,7 +63,7 @@ void NeuralNetwork::backpropagate(const Eigen::MatrixXd& input, const Eigen::Mat
     biases[0] -= learning_rate * nabla_b;
 }
 
-csv::csv(const char* filename, int idim){
+ncsv::ncsv(const char* filename, int idim){
     this->idim = idim;
     std::ifstream file(filename);
     char c;
@@ -74,11 +74,11 @@ csv::csv(const char* filename, int idim){
     }
     file.close();
 }
-csv::~csv(){
+ncsv::~ncsv(){
 }
 
-trainset csv::read_data(const char* filename, int n){
-    trainset res;
+n_trainset ncsv::read_data(const char* filename, int n){
+    n_trainset res;
     std::ifstream file(filename);
     if(!file.is_open()){
         throw std::runtime_error("Failed to open file");
@@ -128,6 +128,6 @@ trainset csv::read_data(const char* filename, int n){
     throw std::out_of_range("requestd line number is out of bound");
 }
 
-int csv::getrow(){
+int ncsv::getrow(){
     return rows;
 }

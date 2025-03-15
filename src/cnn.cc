@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "nn.hh"
 #include "cnn.hh"
 #include "lib/utils.hh"
 
@@ -13,48 +14,58 @@ void cnn::frwd_p(trainset & curr){
 }
 
 void cnn::_train(trainset &curr){
-    int layer_id =0;
-    int fid = 1;
-    log("current image " << curr.id)
-
-    buff_data.resize(net.layers.size());
-    filters.resize(net.layers.size());
-
-    for(auto f: net.layers){
-        int i =0;
-        //f.filters
-        buff_data[i].resize(f.filters);
-        filters[i].resize(f.filters);
-        i++;
-    }
-    // buff_data[layer_id].resize(fid++);
-    log(fid)
-    dlog()
-    // the error is below
-    buff_data[layer_id][fid] = curr.image;
-
+    Eigen::MatrixXd img = curr.image;
+    log("image size " << img.rows() << "x" << img.cols());
+    int i = 0; 
+    buff_data[0][0] = img;
+    buff_data[0][1] = img;
+    int prvlyrfc = 0;
     for(auto layer: net.layers){
         if(layer._type == "conv"){
-            int m = layer.kernel_s;
-            dlog()
-            for(int i = 0; i<layer.filters; i++){
-                filters[layer_id][i] = Eigen::MatrixXd::Random(m,m);
+            // log("convolution layer");
+            for(int j = 0; j< layer.filters; j++){
+                buff_data[i+1][j] = convolve(buff_data[i][j], filters[i][j], layer.stride, layer.padding);
+                log("convolution size " << buff_data[i+1][j].rows() << "x" << buff_data[i+1][j].cols());
+                prvlyrfc++;
             }
-            dlog()
-            for(int i = 0; i < layer.filters; i++){
-                dlog()
-                buff_data[layer_id+1][i] = convolve(buff_data[layer_id][i],filters[layer_id][i],layer.stride, layer.padding);
-            }
-            fid++;
+            i++;
         }else{
+            // log("layer.filer no " << prvlyrfc);
+            for(int j = 0; j< prvlyrfc; j++){
+                // log("size " << buff_data[i][j].rows() << "x" << buff_data[i][j].cols());
 
+                buff_data[i+1][j] = layer.pool(buff_data[i][j]);
+                log("pooling size " << buff_data[i+1][j].rows() << "x" << buff_data[i+1][j].cols());
+            }
+            prvlyrfc = 0;
+            i++;
         }
-        layer_id++;
-        // buff_data[layer_id].resize(fid++);
+    }
+    std::vector<double> out;// = flatten(buff_data[i][0]);
+    for(int j = 0; j< buff_data[i].size(); j++){
+        std::vector<double> temp = flatten(buff_data[i][j]);
+        out.insert(out.end(), temp.begin(), temp.end());
     }
 
-    // and here the flatten func
-    log(fid)
+    std::vector<int> lyrs;
+    lyrs.push_back(out.size());
+    lyrs.insert(lyrs.end(), net.hidden_lyrs.begin(), net.hidden_lyrs.end());
+    lyrs.push_back(net.out_param_size);
+    NeuralNetwork nn(lyrs);
+    Eigen::VectorXd input = Eigen::Map<Eigen::VectorXd>(out.data(), out.size());
+    Eigen::VectorXd enc = Eigen::VectorXd::Zero(10);
+    enc[curr.id] =1;
+    Eigen::VectorXd target = enc;
+    nn.train(input, target, 0.1, 10);
+    Eigen::MatrixXd outpp = nn.feedforward(input);
+    log(outpp)
+
+    // log("the out size is " << out.size());
+    // for(auto i: out){
+    //     std::cout << i << " ";
+    // }
+    // std::cout << std::endl;
+
 
 }
 
@@ -72,6 +83,26 @@ std::vector<double> cnn::flatten(Eigen::MatrixXd& inp){
 
 cnn::cnn(_arch& cnn_arch){
     this->net = cnn_arch; 
+
+
+    filters.resize(net.layers.size());
+    buff_data.resize(net.layers.size()+2);
+    buff_data[0].resize(2);
+    int i = 0;
+    for(auto layer: net.layers){
+        if(layer._type == "conv"){
+            filters[i].resize(layer.filters);
+            buff_data[i+1].resize(layer.filters);
+            for(int j = 0 ; j< layer.filters; j++){
+                filters[i][j] = Eigen::MatrixXd::Random(layer.kernel_s, layer.kernel_s);
+            }
+            i++;
+        }else{
+            // filters[i].resize(2);
+            buff_data[i+1].resize(2);
+            i++;
+        }
+    }
 }   
 cnn::~cnn(){
 }
