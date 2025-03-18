@@ -13,6 +13,27 @@
 void cnn::frwd_p(trainset & curr){
 }
 
+// void CNN::train(const std::vector<trainset>& dataset, int epochs, double learning_rate) {
+//     for (int epoch = 0; epoch < epochs; ++epoch) {
+//         double total_loss = 0.0;
+//         for (const auto& data : dataset) {
+//             Eigen::MatrixXd input = data.image;
+//             Eigen::MatrixXd target = data.label;
+            
+//             // Forward pass
+//             Eigen::MatrixXd output = forward(input);
+            
+//             // Compute loss
+//             total_loss += (output - target).array().square().sum();
+            
+//             // Backpropagation
+//             backpropagate(input, target, learning_rate);
+//         }
+//         std::cout << "Epoch " << epoch + 1 << "/" << epochs << " - Loss: " << total_loss / dataset.size() << std::endl;
+//     }
+// }
+
+
 void cnn::_train(trainset &curr){
     Eigen::MatrixXd img = curr.image;
     log("image size " << img.rows() << "x" << img.cols());
