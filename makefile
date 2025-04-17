@@ -1,5 +1,5 @@
 CC= g++ 
-CFLAGS = -std=c++23 -O3
+CFLAGS = -std=c++23 -O3 -mavx2 -mfma -ffast-math
 LIBS = -lm -LEigen
 
 # find all the .cc files
