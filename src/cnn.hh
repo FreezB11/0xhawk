@@ -2,6 +2,8 @@
 #include <eigen3/Eigen/Dense>
 #include "./lib/mmath.h"
 #include <vector>
+#include "conv.h"
+#include "matrix.h"
 
 #define IMAGED 28 // taking the image to be square
 
@@ -18,7 +20,7 @@ typedef struct _layer{
     int                                         stride = 1;
     int                                         padding = 0;
     // Eigen::MatrixXf         (*convolve)(Eigen::MatrixXf& base, Eigen::MatrixXf& kernel, int padd, int stride);
-    Eigen::MatrixXd                             (*pool)(Eigen::MatrixXd& input) = nullptr;
+    Eigen::MatrixXd                             (*pool)(matrix& input, int pool_size, int stride, int padding) = nullptr;
 }_layer;
 
 typedef struct _arch{

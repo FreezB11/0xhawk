@@ -8,31 +8,12 @@
 #include <vector>
 #include "nn.hh"
 #include "cnn.hh"
-#include "lib/utils.hh"
+#include "conv.h"
+
+#define log(x) std::cout << x << std::endl;
 
 void cnn::frwd_p(trainset & curr){
 }
-
-// void CNN::train(const std::vector<trainset>& dataset, int epochs, double learning_rate) {
-//     for (int epoch = 0; epoch < epochs; ++epoch) {
-//         double total_loss = 0.0;
-//         for (const auto& data : dataset) {
-//             Eigen::MatrixXd input = data.image;
-//             Eigen::MatrixXd target = data.label;
-            
-//             // Forward pass
-//             Eigen::MatrixXd output = forward(input);
-            
-//             // Compute loss
-//             total_loss += (output - target).array().square().sum();
-            
-//             // Backpropagation
-//             backpropagate(input, target, learning_rate);
-//         }
-//         std::cout << "Epoch " << epoch + 1 << "/" << epochs << " - Loss: " << total_loss / dataset.size() << std::endl;
-//     }
-// }
-
 
 void cnn::_train(trainset &curr){
     Eigen::MatrixXd img = curr.image;
@@ -45,7 +26,7 @@ void cnn::_train(trainset &curr){
         if(layer._type == "conv"){
             // log("convolution layer");
             for(int j = 0; j< layer.filters; j++){
-                buff_data[i+1][j] = convolve(buff_data[i][j], filters[i][j], layer.stride, layer.padding);
+                buff_data[i+1][j] = CNN::convolve(buff_data[i][j], filters[i][j], layer.stride, layer.padding);
                 log("convolution size " << buff_data[i+1][j].rows() << "x" << buff_data[i+1][j].cols());
                 prvlyrfc++;
             }
@@ -53,9 +34,9 @@ void cnn::_train(trainset &curr){
         }else{
             // log("layer.filer no " << prvlyrfc);
             for(int j = 0; j< prvlyrfc; j++){
-                // log("size " << buff_data[i][j].rows() << "x" << buff_data[i][j].cols());
+                log("size " << buff_data[i][j].rows() << "x" << buff_data[i][j].cols());
 
-                buff_data[i+1][j] = layer.pool(buff_data[i][j]);
+                buff_data[i+1][j] = layer.pool(buff_data[i][j],2,2,0);
                 log("pooling size " << buff_data[i+1][j].rows() << "x" << buff_data[i+1][j].cols());
             }
             prvlyrfc = 0;
@@ -144,7 +125,7 @@ void cnn::train(){
 
 //train
 
-int main(){
+// int main(){
     // std::cout << IMAGED << std::endl;
     // csv train("./dataset/train.csv");
     // std::cout << train.getrow() << std::endl;
@@ -181,23 +162,23 @@ int main(){
     // Eigen::MatrixXf result = convolve(input, kernel, padding, stride);
     // std::cout << "Result of convolution:\n" << result << std::endl;
 
-    _arch my = {
-        .out_param_size = 10,
-        .hidden_lyrs = {50,90},
-        .activation = relu,
-        ._testset = "./dataset/test.csv",
-        ._trainset = "./dataset/train.csv",
-        .layers = {
-                    _layer{._type = "conv",.filters = 2,.kernel_s = 5},
-                    _layer{._type = "pool",.pool = max_pool},
-                    _layer{._type = "conv",.filters = 2,.kernel_s = 3},
-                    _layer{._type = "pool",.pool = avg_pool},
-                    _layer{._type = "conv",.filters = 2,.kernel_s = 2}
-        },
-    };
+//     _arch my = {
+//         .out_param_size = 10,
+//         .hidden_lyrs = {50,90},
+//         .activation = relu,
+//         ._testset = "./dataset/test.csv",
+//         ._trainset = "./dataset/train.csv",
+//         .layers = {
+//                     _layer{._type = "conv",.filters = 2,.kernel_s = 5},
+//                     _layer{._type = "pool",.pool = max_pool},
+//                     _layer{._type = "conv",.filters = 2,.kernel_s = 3},
+//                     _layer{._type = "pool",.pool = avg_pool},
+//                     _layer{._type = "conv",.filters = 2,.kernel_s = 2}
+//         },
+//     };
 
-    cnn mynet(my);
-    mynet.train();
+//     cnn mynet(my);
+//     mynet.train();
 
-    return 0;
-}
+//     return 0;
+// }

@@ -8,4 +8,4 @@ using namespace Eigen;
 using matrix = Matrix<double, Dynamic, Dynamic>;
 using vector = Matrix<double, Dynamic, 1>;
 
-using tensor = vector<Matrix<double, Dynamic, Dynamic>>;
+using tensor = std::vector<Matrix<double, Dynamic, Dynamic>>;
