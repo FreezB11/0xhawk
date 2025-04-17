@@ -1,2 +1,4 @@
 *.csv
 /py
+*.o
+/dump

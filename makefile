@@ -1,10 +1,22 @@
 CC= g++ 
+CFLAGS = -std=c++23 -O3
 LIBS = -lm -LEigen
-FILES = src/csv.cc src/cnn.cc src/lib/mmath.cc src/nn.cc
 
-all:
-	${CC} -o cnn ${FILES} ${LIBS}
-	./cnn
+# find all the .cc files
+cc = $(wildcard ./src/*.cc)
+# convert the .cc files to .o files
+obj = ${cc:.cc=.o}
+# find all the .h files
+h = $(wildcard ./src/*.h)
+
+all: ${obj}
+	${CC} ${CFLAGS} main.cc ${obj} -o main ${LIBS}
+
+%.o: %.cc
+	$(CC) $(CFLAGS) -c $< -o $@
+	@echo "Compiling $< to $@"
 
 clean:
-	rm cnn
+	rm -f *.obj
+	rm -f main
+	clear
