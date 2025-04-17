@@ -6,6 +6,8 @@
 #include "nn.hh"
 #include <fstream>
 #include <iostream>
+#include "matrix.h"
+#include "simd.h"
 
 NeuralNetwork::NeuralNetwork(const std::vector<int>& layers) {
     this->layers = layers;
