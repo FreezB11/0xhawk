@@ -116,10 +116,6 @@ n_trainset ncsv::read_data(const char* filename, int n){
                 std::cerr << "expected " << idim*idim << " pixels, but got " << px.size() << std::endl;
                 throw std::runtime_error("Invalid number of pixels");
             }
-            // Eigen::VectorXd img;
-            // for(int i = 0;  i< IMAGED*IMAGED;++i){
-            //     img[i] = px[i];
-            // }
             Eigen::VectorXd img = Eigen::Map<Eigen::VectorXd>(px.data(), px.size());
             res.data = img;
             return res;

@@ -1,7 +1,6 @@
 #include "cnn.hh"
 #include <fstream>
 
-
 csv::csv(const char* filename){
     std::ifstream file(filename);
     char c;

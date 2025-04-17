@@ -43,7 +43,6 @@ public:
     int                                         getrow();
 };
 
-
 class cnn{
 private:
     int max_fc =                                0;
