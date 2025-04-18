@@ -1,4 +1,4 @@
-#include "cnn.hh"
+#include <hawk/cnn.hh>
 #include <fstream>
 
 csv::csv(const char* filename){

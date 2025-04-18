@@ -1,6 +1,6 @@
 // @file: conv.cc
-#include "conv.h"
-#include "matrix.h"
+#include <hawk/conv.h>
+#include <hawk/matrix.h>
 
 namespace CNN{
 

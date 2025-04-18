@@ -6,9 +6,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "nn.hh"
-#include "cnn.hh"
-#include "conv.h"
+#include <hawk/nn.hh>
+#include <hawk/cnn.hh>
+#include <hawk/conv.h>
 
 #define log(x) std::cout << x << std::endl;
 

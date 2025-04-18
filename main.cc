@@ -1,5 +1,5 @@
-#include "src/cnn.hh"
-#include "src/conv.h"
+#include <hawk/cnn.hh>
+#include <hawk/conv.h>
 
 int main(){
 

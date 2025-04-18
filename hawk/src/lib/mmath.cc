@@ -1,6 +1,6 @@
-#include "mmath.h"
-#include "../matrix.h"
-#include "../simd.h"
+#include <hawk/lib/mmath.h>
+#include <hawk/matrix.h>
+#include <hawk/simd.h>
 #include <eigen3/Eigen/Dense>
 #include <iostream>
 

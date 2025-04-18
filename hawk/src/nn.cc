@@ -3,11 +3,11 @@
     @author yash
     @date 2021-09-30
 */
-#include "nn.hh"
+#include <hawk/nn.hh>
 #include <fstream>
 #include <iostream>
-#include "matrix.h"
-#include "simd.h"
+#include <hawk/matrix.h>
+#include <hawk/simd.h>
 
 NeuralNetwork::NeuralNetwork(const std::vector<int>& layers) {
     this->layers = layers;

@@ -1,9 +1,9 @@
 CC= g++ 
-CFLAGS = -std=c++23 -O3 -mavx2 -mfma -ffast-math
+CFLAGS =-Ihawk/include -std=c++23 -O3 -mavx2 -mfma -ffast-math -Wall -Wextra
 LIBS = -lm -LEigen
-
+HOME = /hawk
 # find all the .cc files
-cc = $(wildcard ./src/*.cc) ${wildcard ./src/lib/*.cc}
+cc = $(wildcard .${HOME}/src/*.cc) ${wildcard .${HOME}/src/lib/*.cc}
 # convert the .cc files to .o files
 obj = ${cc:.cc=.o}
 # find all the .h files
