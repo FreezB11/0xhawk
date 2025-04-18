@@ -17,6 +17,6 @@ all: ${obj}
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f src/*.o src/lib/*.o
+	rm -f hawk/src/*.o hawk/src/lib/*.o
 	rm -f build/main
 	clear
