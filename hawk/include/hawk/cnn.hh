@@ -1,12 +1,13 @@
 #pragma once
 #include <eigen3/Eigen/Dense>
-#include "./lib/mmath.h"
+#include <hawk/lib/mmath.h>
 #include <vector>
-#include "conv.h"
-#include "matrix.h"
+#include <hawk/conv.h>
+#include <hawk/matrix.h>
 
 #define IMAGED 28 // taking the image to be square
-
+namespace HAWK{
+    namespace CNN{
 typedef struct trainset{
     int                                         id;
     Eigen::MatrixXd                             image;
@@ -14,7 +15,7 @@ typedef struct trainset{
 
 typedef struct _layer{
     const char*                                 _type; //i.e convolution or pool
-    int                                         test;
+    // int                                         test;
     int                                         filters = 1;
     int                                         kernel_s;
     int                                         stride = 1;
@@ -23,14 +24,14 @@ typedef struct _layer{
     Eigen::MatrixXd                             (*pool)(matrix& input, int pool_size, int stride, int padding) = nullptr;
 }_layer;
 
-typedef struct _arch{
+typedef struct model{
     int                                         out_param_size;
     std::vector<int>                            hidden_lyrs; // this is for the neural network
     double                                      (*activation)(double x);
     const char*                                 _testset;
     const char*                                 _trainset;
     std::vector<_layer>                         layers;
-}_arch;
+}model;
 
 
 class csv{
@@ -49,7 +50,7 @@ private:
     std::vector<std::vector<Eigen::MatrixXd>>   buff_data;
     std::vector<std::vector<Eigen::MatrixXd>>   filters;
     std::vector<double>                         out_n;
-    _arch                                       net;
+    model                                       net;
     int                                         rows;
     void                                        frwd_p(trainset & curr);
     void                                        _train(trainset &curr);
@@ -57,7 +58,9 @@ private:
 
 
 public:
-    cnn(_arch& cnn_arch);  
+    cnn(model& cnnmodel);  
     ~cnn();
     void                                        train();  
 };
+    }// namespace CNN
+}// namespace HAWK

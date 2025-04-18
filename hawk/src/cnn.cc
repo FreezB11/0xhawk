@@ -12,6 +12,8 @@
 
 #define log(x) std::cout << x << std::endl;
 
+namespace HAWK{
+    namespace CNN{
 void cnn::frwd_p(trainset & curr){
 }
 
@@ -83,8 +85,8 @@ std::vector<double> cnn::flatten(Eigen::MatrixXd& inp){
     return out;
 }
 
-cnn::cnn(_arch& cnn_arch){
-    this->net = cnn_arch; 
+cnn::cnn(model& cnnmodel){
+    this->net = cnnmodel; 
 
 
     filters.resize(net.layers.size());
@@ -122,3 +124,6 @@ void cnn::train(){
         }
     }
 }
+
+    }// namespace CNN
+}// namespace HAWK

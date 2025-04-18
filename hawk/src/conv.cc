@@ -2,6 +2,8 @@
 #include <hawk/conv.h>
 #include <hawk/matrix.h>
 
+namespace HAWK{
+
 namespace CNN{
 
 matrix convolve(matrix& base, matrix& kernel, int stride =1, int padding =0){
@@ -201,3 +203,4 @@ matrix backprop_maxpool(matrix& input, matrix& output_grad, int pool_size = 2, i
 
 
 } // namespace CNN
+} // namespace HAWK

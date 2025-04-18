@@ -1,6 +1,9 @@
 #include <hawk/cnn.hh>
 #include <fstream>
 
+namespace HAWK{
+    namespace CNN{
+
 csv::csv(const char* filename){
     std::ifstream file(filename);
     char c;
@@ -56,4 +59,5 @@ int csv::getrow(){
     return rows;
 }
 
-
+    }// namespace CNN
+}// namespace HAWK
