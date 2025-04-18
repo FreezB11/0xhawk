@@ -55,7 +55,7 @@ void cnn::_train(trainset &curr){
     lyrs.push_back(out.size());
     lyrs.insert(lyrs.end(), net.hidden_lyrs.begin(), net.hidden_lyrs.end());
     lyrs.push_back(net.out_param_size);
-    NeuralNetwork nn(lyrs);
+    HAWK::NN::NeuralNetwork nn(lyrs);
     Eigen::VectorXd input = Eigen::Map<Eigen::VectorXd>(out.data(), out.size());
     Eigen::VectorXd enc = Eigen::VectorXd::Zero(10);
     enc[curr.id] =1;

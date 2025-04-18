@@ -9,6 +9,9 @@
 #include <hawk/matrix.h>
 #include <hawk/simd.h>
 
+namespace HAWK {
+namespace NN {
+
 NeuralNetwork::NeuralNetwork(const std::vector<int>& layers) {
     this->layers = layers;
     for (int i = 0; i < layers.size() - 1; i++) {
@@ -129,3 +132,6 @@ n_trainset ncsv::read_data(const char* filename, int n){
 int ncsv::getrow(){
     return rows;
 }
+
+} // namespace NN
+} // namespace HAWK

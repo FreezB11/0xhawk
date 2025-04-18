@@ -19,6 +19,9 @@
 #include <vector>
 #include <eigen3/Eigen/Dense>
 
+namespace HAWK{
+    namespace NN{
+
 typedef struct n_trainset{
     Eigen::VectorXd id;
     Eigen::VectorXd data;
@@ -50,3 +53,6 @@ private:
     Eigen::MatrixXd                 sigmoid_derivative(const Eigen::MatrixXd& z);
     void                            backpropagate(const Eigen::MatrixXd& input, const Eigen::MatrixXd& target, double learning_rate);
 };
+
+    }// namespace NN
+}// namespace HAWK
