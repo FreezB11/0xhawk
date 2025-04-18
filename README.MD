@@ -1,4 +1,5 @@
 # HAWK 
+![Version](https://img.shields.io/badge/version-0.1-pink)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![GitHub stars](https://img.shields.io/github/stars/FreezB11/0xhawk?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/FreezB11/0xhawk)
