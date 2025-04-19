@@ -37,5 +37,71 @@ void SGDMomentum<Scalar>::step(){
     }
 }
 
+template<typename Scalar>
+AdaGrad<Scalar>::AdaGrad(std::vector<Tensor<Scalar>>& params, Scalar lr, Scalar epsilon){
+    this->params = params;
+    this->lr = lr;
+    this->eps = epsilon;
+    for(const auto& param: params){
+        this->cache.push_back(matrix::Zero(param.data.rows(), param.data.cols()));
+    }
+
+}
+
+template<typename Scalar>
+void AdaGrad<Scalar>::step(){
+    for(size_t i = 0; i < this->params.size(); ++i){
+        this->cache[i] += this->params[i].grad.array().square().matrix();
+        this->params[i].data -= (this->lr / (this->cache[i].array().sqrt() + this->eps)) * this->params[i].grad.array();
+    }
+}
+
+template<typename Scalar>
+RMSProp<Scalar>::RMSProp(std::vector<Tensor<Scalar>>& params, Scalar lr, Scalar decay_rate, Scalar epsilon){
+    this->params = params;
+    this->lr = lr;
+    this->decay_rate = decay_rate;
+    this->eps = epsilon;
+    for(const auto& param: params){
+        this->cache.push_back(matrix::Zero(param.data.rows(), param.data.cols()));
+    }
+}
+
+template<typename Scalar>
+void RMSProp<Scalar>::step(){
+    for(size_t i = 0; i < this->params.size(); ++i){
+        this->cache[i] = this->decay_rate * this->cache[i] + (1 - this->decay_rate) * this->params[i].grad.array().square().matrix();
+        this->params[i].data -= (this->lr / (this->cache[i].array().sqrt() + this->eps)) * this->params[i].grad.array();
+    }
+}
+
+template<typename Scalar>
+Adam<Scalar>::Adam(std::vector<Tensor<Scalar>>& params, Scalar lr, Scalar beta1, Scalar beta2, Scalar epsilon){
+    this->params = params;
+    this->lr = lr;
+    this->beta1 = beta1;
+    this->beta2 = beta2;
+    this->eps = epsilon;
+    for(const auto& param: params){
+        this->m.push_back(matrix::Zero(param.data.rows(), param.data.cols()));
+        this->v.push_back(matrix::Zero(param.data.rows(), param.data.cols()));
+    }
+}
+
+template<typename Scalar>
+void Adam<Scalar>::step(){
+    t++;
+    for(size_t i = 0; i < this->params.size(); ++i){
+        this->m[i] = this->beta1 * this->m[i] + (1 - this->beta1) * this->params[i].grad;
+        this->v[i] = this->beta2 * this->v[i] + (1 - this->beta2) * this->params[i].grad.array().square().matrix();
+
+        matrix m_hat = this->m[i] / (1 - std::pow(this->beta1, t));
+        matrix v_hat = this->v[i] / (1 - std::pow(this->beta2, t));
+
+        this->params[i].data -= (this->lr / (v_hat.array().sqrt() + this->eps)) * m_hat.array();
+    }
+}
+
+
     } // namespace Optimizers
 }// namespace HAWK

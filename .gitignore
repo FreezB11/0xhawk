@@ -3,3 +3,4 @@
 *.o
 /dump
 Doxyfile
+/tests
