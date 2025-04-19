@@ -2,6 +2,9 @@
 /// @brief: Optimizers for HawkNet
 #pragma once
 
+#include <vector>
+#include <hawk/matrix.h>
+
 /*!
     @brief Optimizers
       - SGD
@@ -20,13 +23,13 @@ template<typename Scalar = double>
 class Optimizer{
     public:
         virtual void step() = 0; ///< Step function
+        std::vector<Tensor<Scalar>> params; ///< Parameters
         virtual void zero_grad(){
-            for(auto& param : params){
+            for(auto& param : this->params){
                 param.grad.setZero();
             }
         }
-        std::vector<Tensor<Scalar>> params; ///< Parameters
-}
+};
 /*!
     @class SGD
     @ingroup Optimizers
@@ -45,7 +48,8 @@ class SGD : public Optimizer<Scalar>{
     public:
         Scalar lr;
         SGD(std::vector<Tensor<Scalar>>& params, Scalar lr);
-}
+        void step() override;
+};
 
 /*!
     @class SGDMomentum
@@ -69,7 +73,8 @@ class SGDMomentum : public Optimizer<Scalar>{
         Scalar momentum;
         std::vector<matrix> velocities;
         SGDMomentum(std::vector<Tensor<Scalar>>& params, Scalar lr, Scalar momentum);
-}
+        void step() override;
+};
 
 
     }// namespace Optimizers

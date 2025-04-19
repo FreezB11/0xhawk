@@ -6,27 +6,34 @@
 namespace HAWK{
     namespace Optimizers{
 
-SGD::SGD(std::vector<Tensor<Scalar>>& params, Scalar lr) : lr(lr){
+template<typename Scalar>
+SGD<Scalar>::SGD(std::vector<Tensor<Scalar>>& params, Scalar lr){
     this->params = params;
+    this->lr = lr;
 }
 
-void SGD::step() override {
+template<typename Scalar>
+void SGD<Scalar>::step(){
     for(auto& param : this->params){
         param.data -= lr * param.grad;
     }
 }
 
-SGDMomentum::SGDMomentum(std::vector<Tensor<Scalar>>& params, Scalar lr, Scalar momentum) : SGD(params, lr), momentum(momentum){
+template<typename Scalar>
+SGDMomentum<Scalar>::SGDMomentum(std::vector<Tensor<Scalar>>& params, Scalar lr, Scalar momentum){
     this->params  = params;
+    this->lr = lr;
+    this->momentum = momentum;
     for(const auto& param: params){
-        velocity.push_back(matrix::Zero(param.data.rows(), param.data.cols()));
+        this->velocities.push_back(matrix::Zero(param.data.rows(), param.data.cols()));
     }
 }
 
-void SGDMomentum::step() override {
+template<typename Scalar>
+void SGDMomentum<Scalar>::step(){
     for(size_t i = 0; i < this->params.size(); ++i){
-        velocity[i] = momentum * velocity[i] - lr * this->params[i].grad;
-        this->params[i].data += velocity[i];
+        this->velocities[i] = momentum * this->velocities[i] - lr * this->params[i].grad;
+        this->params[i].data += this->velocities[i];
     }
 }
 
