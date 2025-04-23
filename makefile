@@ -1,5 +1,6 @@
 CC= g++ 
-CFLAGS =-Ihawk/include -std=c++23 -O3 -mavx2 -mfma -ffast-math -Wall -Wextra -fPIC
+CV = `pkg-config --cflags opencv4`
+CFLAGS =-Ihawk/include ${CV} -std=c++23 -O3 -mavx2 -mfma -ffast-math -Wall -Wextra -fPIC
 LIBS = -lm -LEigen
 HOME = /hawk
 # find all the .cc files

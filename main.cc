@@ -1,6 +1,7 @@
 /// @file main.cc
 #include <hawk/cnn.hh>
 #include <hawk/conv.h>
+#include <hawk/lib/image.h>
 
 int main(){
     /// @todo implement global namsepace "hawk"
